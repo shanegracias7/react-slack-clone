@@ -5,6 +5,7 @@ import App from './components/App';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import reportWebVitals from './reportWebVitals';
+import 'semantic-ui-css/semantic.min.css'
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
