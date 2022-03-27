@@ -10,7 +10,7 @@ class Register extends React.Component{
         email: '',
         password: '',
         confirmpassword:'',
-        errors: '',
+        errors: [],
         loading: false
     };
 
@@ -25,7 +25,7 @@ class Register extends React.Component{
             return false;
         }
         else if(! this.isPasswordValid(this.state)){
-            error= { message: 'invalid passsword'}
+            error= { message: 'invalid password'}
             this.setState({errors: errors.concat(error)})
         }
         else {
@@ -80,6 +80,12 @@ class Register extends React.Component{
     };
     displayError = errors => errors.map((error,i) => <p key={i}>{error.message}</p>);
 
+    handleInputError = (errors, inputName) => {
+        return errors.some(error => error.message.toLowerCase().includes(inputName))
+          ? "error"
+          : "";
+      };
+
     render(){
         const {username,email,password,confirmpassword,errors,loading}=this.state;
         return(
@@ -91,10 +97,10 @@ class Register extends React.Component{
             </Header>
             <Form onSubmit={this.handleSubmit} size="large">
                 <Segment stacked>
-                     <Form.Input fluid name="username" value={username} icon="user" iconPosition="left" placeholder="username" onChange={this.handleChange} type="text" />
-                     <Form.Input fluid name="email" value={email} icon="mail" iconPosition="left" placeholder="email" onChange={this.handleChange} type="email" />
-                     <Form.Input fluid name="password" value={password} icon="lock" iconPosition="left" placeholder="password" onChange={this.handleChange} type="password" />
-                     <Form.Input fluid name="confirmpassword" value={confirmpassword} icon="repeat" iconPosition="left" placeholder="confirm password" onChange={this.handleChange} type="password" />
+                     <Form.Input fluid  className={this.handleInputError(errors, "username")}   name="username"        value={username}          icon="user"     iconPosition="left" placeholder="username"          onChange={this.handleChange} type="text" />
+                     <Form.Input fluid  className={this.handleInputError(errors, "email")}      name="email"           value={email}             icon="mail"     iconPosition="left" placeholder="email"             onChange={this.handleChange} type="email" />
+                     <Form.Input fluid  className={this.handleInputError(errors, "password")}   name="password"        value={password}          icon="lock"     iconPosition="left" placeholder="password"          onChange={this.handleChange} type="password" />
+                     <Form.Input fluid  className={this.handleInputError(errors, "password")}   name="confirmpassword" value={confirmpassword}   icon="repeat"   iconPosition="left" placeholder="confirm password"  onChange={this.handleChange} type="password" />
                      <Button  disabled={loading} className={loading? 'loading':''} fluid color="blue" size="large">submit</Button>
                 </Segment>
             </Form>
