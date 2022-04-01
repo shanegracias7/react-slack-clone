@@ -2,6 +2,7 @@ import React from "react";
 import {Grid,Form,Segment,Button,Header,Message,Icon} from "semantic-ui-react";
 import {Link} from 'react-router-dom';
 import firebase from '../../firebase';
+import md5 from 'md5';
 
 class Register extends React.Component{
 
@@ -66,8 +67,18 @@ class Register extends React.Component{
                 .createUserWithEmailAndPassword(this.state.email,this.state.password)
                 .then(createdUser => {
                     console.log('new user created');
+                    createdUser.user.updateProfile({
+                        displayName : this.state.username,
+                        photoURL : `http://gravatar.com/avatar/${md5(createdUser.user.email)}?d=identicon`
+                    })
+                    .then(()=>{
+                        this.setState({loading:false })
+                    })
+                    .catch(err => {
+                        this.setState({errors: this.state.errors.concat(err), loading:false })
+                    })
                     console.log(createdUser);
-                    this.setState({loading:false })
+                    
                 })
                 .catch(err => {
                     console.error(err);
@@ -78,6 +89,8 @@ class Register extends React.Component{
         
             
     };
+
+
     displayError = errors => errors.map((error,i) => <p key={i}>{error.message}</p>);
 
     handleInputError = (errors, inputName) => {
