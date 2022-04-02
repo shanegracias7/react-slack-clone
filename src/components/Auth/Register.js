@@ -13,7 +13,7 @@ class Register extends React.Component{
         confirmpassword:'',
         errors: [],
         loading: false,
-        usersRef : firebase.database().ref("users")
+        
     };
 
     isFormValid = ()=>{
@@ -73,9 +73,10 @@ class Register extends React.Component{
                         photoURL : `http://gravatar.com/avatar/${md5(createdUser.user.email)}?d=identicon`
                     })
                     .then(()=>{
-                        this.saveUser(createdUser).then(()=>{
-                            console.log("user saved")
-                        })
+                        return firebase.database().ref("users").child(createdUser.user.uid).set({
+                            name: createdUser.user.displayName,
+                            avatar: createdUser.user.photoURL
+                          });
                     })
                     .catch(err => {
                         this.setState({errors: this.state.errors.concat(err), loading:false })
@@ -92,12 +93,7 @@ class Register extends React.Component{
         
             
     };
-    saveUser = createdUser => {
-        return this.state.usersRef.child(createdUser.user.uid).set({
-          name: createdUser.user.displayName,
-          avatar: createdUser.user.photoURL
-        });
-      };
+    
 
     displayError = errors => errors.map((error,i) => <p key={i}>{error.message}</p>);
 
