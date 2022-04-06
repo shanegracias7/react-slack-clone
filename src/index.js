@@ -8,13 +8,22 @@ import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-css/semantic.min.css'
 import firebase from "./firebase";
 
-import {BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom'
+import { Provider , connect} from 'react-redux';
+import {createStore} from 'redux';
+import {composeWithDevTools} from 'redux-devtools-extension';
 
+import {BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom'
+import rootReducer from './reducers';
+import { setUsers } from './actions';
+
+const store = createStore(rootReducer,composeWithDevTools());
 
 class Root extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
+        console.log(user)
+        this.props.setUsers(user)
         this.props.history.push("/");
       }
     });
@@ -30,13 +39,15 @@ class Root extends React.Component {
     );
   }
 }
-const RootWithAuth = withRouter(Root);
+const RootWithAuth = withRouter(connect(null,{setUsers})(Root));
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-    <RootWithAuth />
-  </Router>,
+    <Provider store={store}> 
+      <Router>
+        <RootWithAuth />
+      </Router>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
