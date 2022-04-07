@@ -8,3 +8,9 @@ export const setUsers = user => {
         }
     }
 } 
+
+export const clearUser = () =>{
+    return{
+        type:actionTypes.CLEAR_USER
+    }
+}
