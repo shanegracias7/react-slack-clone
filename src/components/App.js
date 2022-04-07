@@ -12,8 +12,7 @@ const App = ()=>(
   <Grid columns="equal" className='app' style={{background:'#eee'}}>
     <ColorPanel/>
     <SidePanel/>
-
-    <Grid.Column Style={{ marginleft : 320}}>
+    <Grid.Column Style={{ marginleft : 360}}>
       <Messages/>
     </Grid.Column>
     

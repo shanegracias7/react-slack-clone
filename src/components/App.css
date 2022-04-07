@@ -1,9 +1,7 @@
 html,
 body,
-
-.app{
-    height: 100vh;
-    background: #5a5858;
-    padding: 1em;
-    
+.app {
+  height: 100vh;
+  background: #eee;
+  padding: 1em;
 }
