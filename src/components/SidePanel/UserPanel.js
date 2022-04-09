@@ -43,7 +43,7 @@ class UserPanel extends React.Component{
                             <Header.Content>Ping</Header.Content>
                         </Header>
                         {/*user dropdown*/}
-                        <Header inverted  as="h2" style={{padding:'0.25em'}}>
+                        <Header inverted  as="h4" style={{padding:'0.25em'}}>
                             <Dropdown 
                                 trigger={
                                     <span>
