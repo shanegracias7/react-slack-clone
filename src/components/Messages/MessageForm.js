@@ -36,7 +36,6 @@ class MessageForm extends React.Component {
               .push()
               .set(this.createMessage())
               .then(() => {
-                  console.log('message sent')
                 this.setState({ loading: false, message: "", errors: [] });
               })
               .catch(err => {
@@ -55,12 +54,14 @@ class MessageForm extends React.Component {
     }
     render() {
 
-        const {errors}=this.state
+        const {errors,message,loading}=this.state
         return (
         <Segment className="message__form">
             <Input
             fluid
             name="message"
+            value={message}
+            disabled={loading}
             style={{ marginBottom: "0.7em" }}
             label={<Button icon={"add"} />}
             labelPosition="left"
