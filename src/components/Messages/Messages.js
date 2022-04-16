@@ -34,16 +34,15 @@ class Messages extends React.Component {
             })
         })
     }
-    displayMessages = messages=>{
-       return(
-        messages.length>0 && messages.map(message =>(
-            <Message 
-                key={message.timestamp}
-                message={message}
-                user={this.state.user}
-            />))
-       ) 
-    }
+    displayMessages = messages =>
+    messages.length > 0 &&
+    messages.map(message => (
+      <Message
+        key={message.timestamp}
+        message={message}
+        user={this.state.user}
+      />
+    ));
         
     
     render() {
