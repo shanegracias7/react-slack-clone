@@ -84,18 +84,20 @@ class Messages extends React.Component {
         }
         ,[])
         this.setState({searchResult})
+        setTimeout(()=>this.setState({searchLoading:false}),500)
     }
 
 
 
     render() {
-        const { messagesRef,channel,user, messages,numUniqueUsers,searchResult,searchTerm} = this.state
+        const { messagesRef,channel,user, messages,numUniqueUsers,searchResult,searchTerm,searchLoading} = this.state
         return (
         <React.Fragment>
             <MessagesHeader 
                 channelName = {this.displayChannelName(channel)}
                 numUniqueUsers={numUniqueUsers}
                 handleSearchChange={this.handleSearchChange}
+                searchLoading={searchLoading}
             />
 
             <Segment>
