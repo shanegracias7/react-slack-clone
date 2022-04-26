@@ -13,7 +13,10 @@ class Messages extends React.Component {
         user:this.props.currentUser,
         messages:[],
         messagesLoading:true,
-        numUniqueUsers:''
+        numUniqueUsers:'',
+        searchLoading:false,
+        searchTerm:'',
+        searchResult:[]
     }
     componentDidMount(){
         const {channel,user} = this.state;
@@ -60,18 +63,44 @@ class Messages extends React.Component {
     
     displayChannelName = channel => channel? `#${channel.name}` :''
     
+    handleSearchChange = event =>{
+        this.setState({
+            searchTerm:event.target.value,
+            searchLoading:true
+        },
+        ()=>this.handleSearchMessage())
+    }
+
+    handleSearchMessage = ()=>{
+        const channelMessages = [...this.state.messages];
+        const regex = new RegExp(this.state.searchTerm,'gi')
+        const searchResult = channelMessages.reduce((acc,message)=>{
+            if((message.content && message.content.match(regex))
+                || message.user.name.match(regex))
+            {
+                acc.push(message);
+            }
+            return acc;
+        }
+        ,[])
+        this.setState({searchResult})
+    }
+
+
+
     render() {
-        const { messagesRef,channel,user, messages,numUniqueUsers} = this.state
+        const { messagesRef,channel,user, messages,numUniqueUsers,searchResult,searchTerm} = this.state
         return (
         <React.Fragment>
             <MessagesHeader 
                 channelName = {this.displayChannelName(channel)}
                 numUniqueUsers={numUniqueUsers}
+                handleSearchChange={this.handleSearchChange}
             />
 
             <Segment>
             <Comment.Group className="messages">
-            {this.displayMessages(messages)}
+            {searchTerm ? this.displayMessages(searchResult) : this.displayMessages(messages)}
             </Comment.Group>
             </Segment>
 
@@ -84,5 +113,4 @@ class Messages extends React.Component {
         );
     }
 }
-
 export default Messages;
