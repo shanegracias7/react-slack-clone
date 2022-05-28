@@ -18,7 +18,8 @@ class Messages extends React.Component {
         numUniqueUsers:'',
         searchLoading:false,
         searchTerm:'',
-        searchResult:[]
+        searchResult:[],
+        isChannelStarred:false
     }
 
     getMessagesRef =()=>{
@@ -98,10 +99,24 @@ class Messages extends React.Component {
         setTimeout(()=>this.setState({searchLoading:false}),500)
     }
 
+    handleStar =()=>{
+        this.setState(prevState =>({
+            isChannelStarred:!prevState.isChannelStarred
+        }),()=>this.starChannel)
+    }
+
+    starChannel =()=>{
+        if(this.State.isChannelStarred){
+            console.log('star')
+        }
+        else{
+            console.log('unstar')
+        }
+    }
 
 
     render() {
-        const { messagesRef,channel,user, messages,numUniqueUsers,searchResult,searchTerm,searchLoading,isPrivateChannel} = this.state
+        const { messagesRef,channel,user, messages,numUniqueUsers,searchResult,searchTerm,searchLoading,isPrivateChannel,isChannelStarred} = this.state
         return (
         <React.Fragment>
             <MessagesHeader 
@@ -110,6 +125,8 @@ class Messages extends React.Component {
                 handleSearchChange={this.handleSearchChange}
                 searchLoading={searchLoading}
                 isPrivateChannel={isPrivateChannel}
+                isChannelStarred={isChannelStarred}
+                handleStar={this.handleStar}
             />
 
             <Segment>
