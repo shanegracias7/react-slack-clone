@@ -19,7 +19,8 @@ class Messages extends React.Component {
         searchLoading:false,
         searchTerm:'',
         searchResult:[],
-        isChannelStarred:false
+        isChannelStarred:false,
+        userRef:firebase.database().ref('users')
     }
 
     getMessagesRef =()=>{
@@ -32,11 +33,26 @@ class Messages extends React.Component {
 
         if(channel&&user){
             this.addListners(channel.id)
+            this.addUserStarsListner(channel.id,user.uid)
         }
     }
     addListners = channelId =>{
         this.addMessageListner(channelId)
     }
+    addUserStarsListner=(channelId,userId)=>{
+        this.state.userRef
+            .child(userId)
+            .child('starred')
+            .once('value')
+            .then(data=>{
+                if(data.val()!==null){
+                    const ChannelIds = Object.keys(data.val())
+                    const prevStarred = ChannelIds.includes(channelId)
+                    this.setState({isChannelStarred:prevStarred})
+                }
+            })
+    }
+
     addMessageListner = channelId =>{
         let loadedMessages = [];
         const ref = this.getMessagesRef()
@@ -102,15 +118,32 @@ class Messages extends React.Component {
     handleStar =()=>{
         this.setState(prevState =>({
             isChannelStarred:!prevState.isChannelStarred
-        }),()=>this.starChannel)
+        }),()=>this.starChannel())
     }
 
     starChannel =()=>{
-        if(this.State.isChannelStarred){
-            console.log('star')
+        if(this.state.isChannelStarred){
+            this.state.userRef
+                .child(`${this.state.user.uid}/starred`)
+                .update({
+                    [this.state.channel.id]:{
+                        name:this.state.channel.name,
+                        details:this.state.channel.details,
+                        createdBy:{
+                            name:this.state.channel.createdBy.name,
+                            avatar:this.state.channel.createdBy.avatar
+                        }
+                    }
+                })
         }
         else{
-            console.log('unstar')
+            this.state.userRef
+                .child(`${this.state.user.uid}/starred`)
+                .remove(err=>{
+                    if(err!==null){
+                        console.error(err)
+                    }
+                })
         }
     }
 
