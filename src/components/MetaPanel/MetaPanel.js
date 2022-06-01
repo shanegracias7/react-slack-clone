@@ -17,6 +17,7 @@ class MetaPanel extends React.Component{
     }
     render(){
         const {activeIndex,privateChannel,channel} = this.state
+        const {userPosts} = this.props
         if(privateChannel) return null;
         return (
             <Segment loading={!channel}>
@@ -47,13 +48,13 @@ class MetaPanel extends React.Component{
                     >
                         <Icon name="dropdown"/>
                         <Icon name="user circle"/>
-                        top posters
+                        Top Posters
                     </Accordion.Title>
 
                     <Accordion.Content
                         active={activeIndex === 1}
                     >
-                        posters
+                        {userPosts&& this.displayTopPosters(userPosts)}
                     </Accordion.Content>
 
                     <Accordion.Title

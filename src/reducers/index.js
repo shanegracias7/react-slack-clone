@@ -4,7 +4,8 @@ import { combineReducers } from 'redux';
 
 const initialState = {
     currentUser : null,
-    isLoading : true
+    isLoading : true,
+    userPost:null
 }
 
 const  user_reducer = (state = initialState ,action) => {
@@ -20,6 +21,7 @@ const  user_reducer = (state = initialState ,action) => {
                 ...state,
                 isLoading : false
             }
+        
         
         default: return state;
     }
@@ -44,6 +46,12 @@ const channel_reducer=(state= initialChannelState, action)=>{
             return{
                 ...state,
                 isPrivateChannel:action.payload.isPrivateChannel
+            }
+
+        case actionTypes.SET_USER_POST:
+            return{
+                ...state,
+                userPosts:action.payload.userPosts
             }
         default:
             return state;
