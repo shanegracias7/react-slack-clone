@@ -1,12 +1,16 @@
 import React from "react";
 import firebase from "../../firebase";
 import { Dropdown, Grid, Header, Icon, Image ,Modal,Input,Button } from "semantic-ui-react";
+import AvatarEditor from 'react-avatar-editor'
 
 class UserPanel extends React.Component{
 
     state ={
         user: this.props.currentUser,
-        modal:false
+        modal:false,
+        previewImage:'',
+        croppedImage: '',
+        blob: ''
     }
 
     openModal = ()=>{
@@ -38,9 +42,33 @@ class UserPanel extends React.Component{
         .signOut()
         .then(()=>{console.log("user signed out ")})
     }
+
+    handleChange = event=>{
+        const file = event.target.files[0]
+        const reader = new FileReader()
+
+        if(file){
+            reader.readAsDataURL(file)
+            reader.addEventListener('load',()=>{
+                this.setState({previewImage:reader.result})
+            })
+        }
+    }
+    handleCropImage = () => {
+        if (this.avatarEditor) {
+          this.avatarEditor.getImageScaledToCanvas().toBlob(blob => {
+            let imageUrl = URL.createObjectURL(blob);
+            this.setState({
+              croppedImage: imageUrl,
+              blob
+            });
+          });
+        }
+      }
+    
     render(){
 
-        const {user,modal} = this.state;
+        const {user,modal,previewImage,croppedImage} = this.state;
         return(
             <Grid style={{background:"#4c3c4c"}}> 
                 <Grid.Column>
@@ -71,13 +99,42 @@ class UserPanel extends React.Component{
                                 type="file"
                                 label="New Avatar"
                                 name="previewImage"
+                                onChange={this.handleChange}
                             />
+                            <Grid centered stackable columns={2}>
+                                <Grid.Row centered>
+                                    <Grid.Column className="ui center aligned grid">
+                                        {previewImage&&( 
+                                            <AvatarEditor
+                                            ref={node => (this.avatarEditor = node)}
+                                            image={previewImage}
+                                            width={250}
+                                            height={250}
+                                            border={20}
+                                            scale={1.2}
+                                          />
+                                        )}  
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                            {croppedImage&&(
+                                                <Image
+                                                    style={{margin:'3.5em auto'}}
+                                                    width={250}
+                                                    height={250}
+                                                    src={croppedImage}
+                                                />
+                                            )}
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
                         </Modal.Content>
                         <Modal.Actions>
-                            <Button color="green" inverted>
-                                <Icon name="save"/>Change Avatar
-                            </Button>
-                            <Button color="green" inverted>
+                            {croppedImage&&(
+                                <Button color="green" inverted>
+                                    <Icon name="save"/>Change Avatar
+                                </Button>
+                            )}
+                            <Button color="green" inverted onClick={this.handleCropImage}>
                                 <Icon name="image"/>Preview
                             </Button>
                             <Button color="red" inverted onClick={this.closeModal}>
