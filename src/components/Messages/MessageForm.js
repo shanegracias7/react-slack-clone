@@ -15,6 +15,7 @@ class MessageForm extends React.Component {
         modal:false,
         uploadTask:null,
         uploadState:'',
+        typingRef:firebase.database().ref('typing'),
         storageRef: firebase.storage().ref(),
         percentUploaded:0
     }
@@ -105,7 +106,7 @@ class MessageForm extends React.Component {
     }
     sendMessage=()=>{
         const {getMessagesRef} = this.props;
-        const {message,channel} = this.state;
+        const {message,channel,typingRef,user} = this.state;
 
         if (message) {
             this.setState({ loading: true });
@@ -115,6 +116,10 @@ class MessageForm extends React.Component {
               .set(this.createMessage())
               .then(() => {
                 this.setState({ loading: false, message: "", errors: [] });
+                typingRef
+                    .child(channel.id)
+                    .child(user.uid)
+                    .remove()
               })
               .catch(err => {
                 console.error(err);
@@ -128,6 +133,21 @@ class MessageForm extends React.Component {
             this.setState({
                 errors: this.state.errors.concat({ message: "Add a message" })
               });
+        }
+    }
+    handleKeyDown = ()=>{
+        const {message,typingRef,channel,user} = this.state
+        if(message){
+            typingRef
+                .child(channel.id)
+                .child(user.uid)
+                .set(user.displayName)
+        }
+        else{
+            typingRef
+                .child(channel.id)
+                .child(user.uid)
+                .remove()
         }
     }
 
@@ -149,6 +169,7 @@ class MessageForm extends React.Component {
             labelPosition="left"
             placeholder="Write your message"
             onChange={this.handleChange}
+            onKeyDown ={this.handleKeyDown}
             className={
                 errors.some(error => error.message.includes("message"))
                   ? "error"
