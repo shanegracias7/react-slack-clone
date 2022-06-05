@@ -42,6 +42,14 @@ class Messages extends React.Component {
             this.addUserStarsListner(channel.id,user.uid)
         }
     }
+    componentDidUpdate(){
+        if(this.messagesEnd){
+            this.scrollToBottom()
+        }
+    }
+    scrollToBottom= ()=>{
+        this.messagesEnd.scrollIntoView({behavior:'smooth'})
+    }
     addListners = channelId =>{
         this.addMessageListner(channelId)
         this.addTypingListner(channelId)
@@ -238,6 +246,7 @@ class Messages extends React.Component {
             <Comment.Group className="messages">
             {searchTerm ? this.displayMessages(searchResult) : this.displayMessages(messages)}
             {this.displayTypingUsers(typingUsers)}
+            <div ref={node =>(this.messagesEnd = node)}></div>
             </Comment.Group>
             </Segment>
 
