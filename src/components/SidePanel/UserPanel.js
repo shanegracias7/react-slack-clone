@@ -2,7 +2,7 @@ import React from "react";
 import firebase from "../../firebase";
 import { Dropdown, Grid, Header, Icon, Image ,Modal,Input,Button } from "semantic-ui-react";
 import AvatarEditor from 'react-avatar-editor'
-import { getDownloadURL } from "firebase/storage";
+
 
 class UserPanel extends React.Component{
 

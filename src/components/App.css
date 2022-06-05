@@ -91,3 +91,8 @@ body,
     opacity: 0;
   }
 }
+
+  /* emoji */
+  .emojipicker{
+    position: absolute;
+  }
