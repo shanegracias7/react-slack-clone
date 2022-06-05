@@ -4,7 +4,8 @@ import uuidv4 from "uuid/v4";
 import firebase from "../../firebase";
 import FileModal from "./FileModal";
 import ProgressBar from "./ProgressBar";
-
+import {emojiIndex , Pcker, Picker} from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css'
 class MessageForm extends React.Component {
     state = {
         message:'',
@@ -17,7 +18,8 @@ class MessageForm extends React.Component {
         uploadState:'',
         typingRef:firebase.database().ref('typing'),
         storageRef: firebase.storage().ref(),
-        percentUploaded:0
+        percentUploaded:0,
+        emojiPicker:false
     }
     handleChange =event=>{
         this.setState({[event.target.name]:event.target.value});  
@@ -150,22 +152,33 @@ class MessageForm extends React.Component {
                 .remove()
         }
     }
-
+    
+    handleTogglePicker = ()=>{
+        this.setState({emojiPicker:!this.state.emojiPicker})
+    }
     openModal =()=>{this.setState({modal:true})}
     closeModal =()=>{this.setState({modal:false})}
 
     render() {
 
-        const {errors,message,loading,modal,uploadState,percentUploaded}=this.state
+        const {errors,message,loading,modal,uploadState,percentUploaded,emojiPicker}=this.state
         return (
         <Segment className="message__form">
+            {emojiPicker&&(
+                <Picker
+                    set="apple"
+                    className="emojipicker"
+                    title="Pick your emoji"
+                    emoji="point_up"
+                />
+            )}
             <Input
             fluid
             name="message"
             value={message}
             disabled={loading}
             style={{ marginBottom: "0.7em" }}
-            label={<Button icon={"add"} />}
+            label={<Button icon={"add"} onClick={this.handleTogglePicker} /> }
             labelPosition="left"
             placeholder="Write your message"
             onChange={this.handleChange}
