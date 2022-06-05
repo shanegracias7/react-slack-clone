@@ -7,6 +7,7 @@ import MessagesHeader from "./MessagesHeader";
 import MessageForm from "./MessageForm";
 import Message from "./Message";
 import Typing from "./Typing";
+import Skeleton from "./Skeleton";
 
 class Messages extends React.Component {
     state={
@@ -226,10 +227,16 @@ class Messages extends React.Component {
             </div>
         ))
     )
-
+    displayMessagesLoading = loading =>(
+        loading?
+        <React.Fragment>
+            {[...Array(10)].map((_,i)=>(<Skeleton key={i}/>))}
+        </React.Fragment>:
+        null
+    )
 
     render() {
-        const { messagesRef,channel,user, messages,numUniqueUsers,searchResult,searchTerm,searchLoading,isPrivateChannel,isChannelStarred,typingUsers} = this.state
+        const { messagesRef,channel,user, messages,numUniqueUsers,searchResult,searchTerm,searchLoading,isPrivateChannel,isChannelStarred,typingUsers,messagesLoading} = this.state
         return (
         <React.Fragment>
             <MessagesHeader 
@@ -243,11 +250,12 @@ class Messages extends React.Component {
             />
 
             <Segment>
-            <Comment.Group className="messages">
-            {searchTerm ? this.displayMessages(searchResult) : this.displayMessages(messages)}
-            {this.displayTypingUsers(typingUsers)}
-            <div ref={node =>(this.messagesEnd = node)}></div>
-            </Comment.Group>
+                <Comment.Group className="messages">
+                    {this.displayMessagesLoading(messagesLoading)}
+                    {searchTerm ? this.displayMessages(searchResult) : this.displayMessages(messages)}
+                    {this.displayTypingUsers(typingUsers)}
+                    <div ref={node =>(this.messagesEnd = node)}></div>
+                </Comment.Group>
             </Segment>
 
             <MessageForm 
