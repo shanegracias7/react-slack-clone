@@ -38,7 +38,7 @@ class MetaPanel extends React.Component{
         const {userPosts} = this.props
         if(privateChannel) return null;
         return (
-            <Segment loading={!channel}>
+            <Segment loading={!channel} className="meta">
                 <Header as={"h3"} attached="top">
                     About # {channel&&channel.name} 
                 </Header>

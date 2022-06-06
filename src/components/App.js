@@ -3,7 +3,7 @@ import React from 'react';
 import {Grid} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import ColorPanel from './ColorPanel/ColorPanel';
+
 import SidePanel from './SidePanel/SidePanel';
 import Messages from './Messages/Messages';
 import MetaPanel from './MetaPanel/MetaPanel';
@@ -11,7 +11,7 @@ import MetaPanel from './MetaPanel/MetaPanel';
 
 const App = ({currentUser,currentChannel,isPrivateChannel,userPosts})=>(
   <Grid columns="equal" className='app' style={{background:'#eee'}}>
-    <ColorPanel/>
+
     <SidePanel
       key={currentUser && currentUser.id}
       currentUser={currentUser}
@@ -25,7 +25,7 @@ const App = ({currentUser,currentChannel,isPrivateChannel,userPosts})=>(
       />
     </Grid.Column>
     
-    <Grid.Column width={4}>
+    <Grid.Column width={4} style={{ height : 320}}>
       <MetaPanel
         key={currentChannel && currentChannel.id}
         isPrivateChannel ={isPrivateChannel}
