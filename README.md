@@ -9,9 +9,10 @@
 5. User authentication with Firebase
 6. Change profile picture
 7. Creating user interfaces with Semantic UI React
+8. Notifications for new messages
 
 ## [VIEW WEBSITE](https://react-slack-clone-84e1d.web.app/)
 
 ## Screenshots
 ![project1](https://user-images.githubusercontent.com/69889290/179218589-8b79a18d-6124-4cbe-a7be-434ab3193afc.gif)
-<img width="1439" alt="image" src="https://user-images.githubusercontent.com/69889290/179218764-2e712768-ea9e-4ffb-a06b-c2da1ed45846.png">
+<img width="1200" alt="image" src="https://user-images.githubusercontent.com/69889290/179218764-2e712768-ea9e-4ffb-a06b-c2da1ed45846.png">
